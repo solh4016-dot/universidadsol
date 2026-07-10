@@ -75,4 +75,22 @@ public class MaestroDAO {
         }
         return modificado;
     }
+    public boolean eliminarMaestro(int numEmpleado) {
+        boolean eliminado = false;
+        String sql = "DELETE FROM maestros WHERE numEmpleado = ?";
+        try (Connection conexion = Conexion.conectar();
+             PreparedStatement stm = conexion.prepareStatement(sql)) {
+            stm.setInt(1, numEmpleado);
+            int filasAfectadas = stm.executeUpdate();
+            eliminado = filasAfectadas > 0;
+            if (eliminado) {
+                System.out.println("Maestro eliminado correctamente");
+            } else {
+                System.out.println("No se encontro un maestro con ese numero de empleado");
+            }
+        } catch (SQLException err) {
+            System.out.println("Error al eliminar el maestro: " + err.getMessage());
+        }
+        return eliminado;
+    }
 }
