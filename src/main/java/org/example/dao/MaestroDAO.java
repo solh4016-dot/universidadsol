@@ -52,4 +52,27 @@ public class MaestroDAO {
         }
         return maestrosBD;
     }
+
+    public boolean modificarMaestro(Maestro maestro) {
+        boolean modificado = false;
+        String sql = "UPDATE maestros SET nombre = ?, puesto = ?, cedulaProfesional = ?, edad = ? WHERE numEmpleado = ?";
+        try (Connection conexion = Conexion.conectar();
+             PreparedStatement stm = conexion.prepareStatement(sql)) {
+            stm.setString(1, maestro.getNombre());
+            stm.setString(2, maestro.getPuesto());
+            stm.setString(3, maestro.getCedulaProfesional());
+            stm.setInt(4, maestro.getEdad());
+            stm.setInt(5, maestro.getNumEmpleado());
+            int filasAfectadas = stm.executeUpdate();
+            modificado = filasAfectadas > 0;
+            if (modificado) {
+                System.out.println("Maestro modificado correctamente");
+            } else {
+                System.out.println("No se encontro un maestro con ese numero de empleado");
+            }
+        } catch (SQLException err) {
+            System.out.println("Error al modificar el maestro: " + err.getMessage());
+        }
+        return modificado;
+    }
 }
