@@ -93,4 +93,25 @@ public class MaestroDAO {
         }
         return eliminado;
     }
+    public Maestro buscarMaestro(int numEmpleado) {
+        Maestro maestro = null;
+        String sql = "SELECT * FROM maestros WHERE numEmpleado = ?";
+        try (Connection conexion = Conexion.conectar();
+             PreparedStatement stm = conexion.prepareStatement(sql)) {
+            stm.setInt(1, numEmpleado);
+            try (ResultSet rs = stm.executeQuery()) {
+                if (rs.next()) {
+                    maestro = new Maestro();
+                    maestro.setNumEmpleado(rs.getInt("numEmpleado"));
+                    maestro.setNombre(rs.getString("nombre"));
+                    maestro.setPuesto(rs.getString("puesto"));
+                    maestro.setCedulaProfesional(rs.getString("cedulaProfesional"));
+                    maestro.setEdad(rs.getInt("edad"));
+                }
+            }
+        } catch (SQLException err) {
+            System.out.println("Error al buscar el maestro: " + err.getMessage());
+        }
+        return maestro;
+    }
 }

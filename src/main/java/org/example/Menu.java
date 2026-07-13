@@ -162,12 +162,28 @@ public class Menu {
         }
     }
 
+    private static void buscarMaestro() {
+        try {
+            System.out.println("Numero de empleado del maestro a buscar: ");
+            int numEmpleado = Integer.parseInt(br.readLine());
+            Maestro encontrado = maestroDAO.buscarMaestro(numEmpleado);
+            if (encontrado != null) {
+                System.out.println("Maestro encontrado:");
+                System.out.println(encontrado);
+            } else {
+                System.out.println("No se encontro un maestro con ese numero de empleado");
+            }
+        } catch (Exception e) {
+            System.out.println("Error al buscar: " + e.getMessage());
+        }
+    }
+
     // ---- Menu principal ----
 
     public static void menu() {
         try {
             int salir = 0;
-            while (salir != 10) {
+            while (salir != 11) {
                 System.out.println("Menu");
                 System.out.println("1. Registrar Alumno");
                 System.out.println("2. Listar Alumnos");
@@ -178,7 +194,8 @@ public class Menu {
                 System.out.println("7. Listar Maestros");
                 System.out.println("8. Modificar Maestro");
                 System.out.println("9. Eliminar Maestro");
-                System.out.println("10. Salir\n");
+                System.out.println("10. Buscar Maestro");
+                System.out.println("11. Salir\n");
 
                 salir = Integer.parseInt(br.readLine());
 
@@ -211,6 +228,9 @@ public class Menu {
                         eliminarMaestro();
                         break;
                     case 10:
+                        buscarMaestro();
+                        break;
+                    case 11:
                         System.out.println("Saliendo del sistema...");
                         break;
                     default:
