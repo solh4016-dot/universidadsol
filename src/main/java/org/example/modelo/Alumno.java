@@ -2,19 +2,19 @@ package org.example.modelo;
 
 import java.util.Objects;
 
-public class Alumno {
+public class Alumno extends PersonaUT implements Ensenable, Evaluable {
     private int numExpediente;
-    private String nombre;
     private int edad;
     private String carrera;
     private int cuatrimestres;
 
     public Alumno() {
+        super("Sin nombre");
     }
 
     public Alumno(int numExpediente, String nombre, int edad, String carrera, int cuatrimestres) {
+        super(nombre);
         this.numExpediente = numExpediente;
-        this.nombre = nombre;
         this.edad = edad;
         this.carrera = carrera;
         this.cuatrimestres = cuatrimestres;
@@ -27,15 +27,6 @@ public class Alumno {
     public void setNumExpediente(int numExpediente) {
         this.numExpediente = numExpediente;
     }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
     public int getEdad() {
         return edad;
     }
@@ -59,12 +50,23 @@ public class Alumno {
     public void setCuatrimestres(int cuatrimestres) {
         this.cuatrimestres = cuatrimestres;
     }
+    @Override
+    public String mostrarTipoPersona(){
+        return "TIPO: ALUMNO";
+    }
+    @Override
+    public void aprender(){
+        System.out.println(getNombre() + "esta aprendiendo en la carrera de "+ carrera);
+    }
+    @Override
+    public void recibirEvaluacion(){
+        System.out.println(getNombre() + "recibio una evaluacion del cuatrimetre "+ cuatrimestres);
+    }
 
     @Override
     public String toString() {
-        return "Alumno{" +
-                "numExpediente=" + numExpediente +
-                ", nombre='" + nombre + '\'' +
+        return super.toString() +"\n" +
+                "{ numExpediente=" + numExpediente +
                 ", edad=" + edad +
                 ", carrera='" + carrera + '\'' +
                 ", cuatrimestres=" + cuatrimestres +

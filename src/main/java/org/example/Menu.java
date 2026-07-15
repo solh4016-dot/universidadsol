@@ -4,6 +4,7 @@ import org.example.dao.AlumnoDAO;
 import org.example.dao.MaestroDAO;
 import org.example.modelo.Alumno;
 import org.example.modelo.Maestro;
+import org.example.modelo.PersonaUT;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +14,6 @@ import java.util.ArrayList;
 public class Menu {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static AlumnoDAO alumnoDAO = new AlumnoDAO();
-    static Alumno alumno = new Alumno();
     static MaestroDAO maestroDAO = new MaestroDAO();
 
     // ---- Modulo: Alumnos ----
@@ -21,16 +21,17 @@ public class Menu {
     private static void registrar() {
         try {
             System.out.println("Numero de expediente: ");
-            alumno.setNumExpediente(Integer.parseInt(br.readLine()));
+            int numExpediente = Integer.parseInt(br.readLine());
             System.out.println("Nombre del alumno: ");
-            alumno.setNombre(br.readLine());
+            String nombre = br.readLine();
             System.out.println("Edad del alumno: ");
-            alumno.setEdad(Integer.parseInt(br.readLine()));
+            int edad = Integer.parseInt(br.readLine());
             System.out.println("Carrera del alumno (TI, Qui, Mec, Mkt): ");
-            alumno.setCarrera(br.readLine());
+            String carrera = br.readLine();
             System.out.println("Cuatrimestre del alumno: ");
-            alumno.setCuatrimestres(Integer.parseInt(br.readLine()));
+            int cuatrimestres = Integer.parseInt(br.readLine());
 
+            Alumno alumno = new Alumno(numExpediente, nombre, edad, carrera, cuatrimestres);
             alumnoDAO.nuevoAlumno(alumno);
         } catch (Exception e) {
             System.out.println("Error al ingresar: " + e.getMessage());
@@ -98,19 +99,18 @@ public class Menu {
 
     private static void registrarMaestro() {
         try {
-            Maestro maestro = new Maestro();
-
             System.out.println("Numero de empleado: ");
-            maestro.setNumEmpleado(Integer.parseInt(br.readLine()));
+            int numEmpleado = Integer.parseInt(br.readLine());
             System.out.println("Nombre del maestro: ");
-            maestro.setNombre(br.readLine());
+            String nombre = br.readLine();
             System.out.println("Puesto: ");
-            maestro.setPuesto(br.readLine());
+            String puesto = br.readLine();
             System.out.println("Cedula profesional: ");
-            maestro.setCedulaProfesional(br.readLine());
+            String cedulaProfesional = br.readLine();
             System.out.println("Edad del maestro: ");
-            maestro.setEdad(Integer.parseInt(br.readLine()));
+            int edad = Integer.parseInt(br.readLine());
 
+            Maestro maestro = new Maestro(numEmpleado, nombre, puesto, cedulaProfesional, edad);
             maestroDAO.nuevoMaestro(maestro);
         } catch (IllegalArgumentException e) {
             System.out.println("Datos invalidos: " + e.getMessage());
@@ -178,12 +178,29 @@ public class Menu {
         }
     }
 
+    // ---- Modulo: Polimorfismo ----
+
+    private static void mostrarComunidadUniversitaria() {
+        ArrayList<Alumno> alumnos = alumnoDAO.extraerAlumnos();
+        ArrayList<Maestro> maestros = maestroDAO.extraerMaestros();
+
+        ArrayList<PersonaUT> comunidad = new ArrayList<>();
+        comunidad.addAll(alumnos);
+        comunidad.addAll(maestros);
+
+        System.out.println("---- Comunidad Universitaria ----");
+        for (PersonaUT persona : comunidad) {
+            System.out.println(persona);
+            System.out.println("----------------------------------");
+        }
+    }
+
     // ---- Menu principal ----
 
     public static void menu() {
         try {
             int salir = 0;
-            while (salir != 11) {
+            while (salir != 12) {
                 System.out.println("Menu");
                 System.out.println("1. Registrar Alumno");
                 System.out.println("2. Listar Alumnos");
@@ -195,7 +212,8 @@ public class Menu {
                 System.out.println("8. Modificar Maestro");
                 System.out.println("9. Eliminar Maestro");
                 System.out.println("10. Buscar Maestro");
-                System.out.println("11. Salir\n");
+                System.out.println("11. Mostrar Comunidad Universitaria");
+                System.out.println("12. Salir\n");
 
                 salir = Integer.parseInt(br.readLine());
 
@@ -231,6 +249,9 @@ public class Menu {
                         buscarMaestro();
                         break;
                     case 11:
+                        mostrarComunidadUniversitaria();
+                        break;
+                    case 12:
                         System.out.println("Saliendo del sistema...");
                         break;
                     default:

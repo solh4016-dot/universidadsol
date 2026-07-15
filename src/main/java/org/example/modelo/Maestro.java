@@ -1,25 +1,20 @@
 package org.example.modelo;
 
-import org.example.config.Conexion;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Objects;
 
-public class Maestro {
+public class Maestro extends PersonaUT implements Ensenador, Evaluador {
     private int numEmpleado;
-    private String nombre;
     private String puesto;
     private String cedulaProfesional;
     private int edad;
 
     public Maestro() {
+        super("Sin nombre");
     }
 
     public Maestro(int numEmpleado, String nombre, String puesto, String cedulaProfesional, int edad) {
+        super(nombre);
         setNumEmpleado(numEmpleado);
-        setNombre(nombre);
         setPuesto(puesto);
         setCedulaProfesional(cedulaProfesional);
         setEdad(edad);
@@ -34,17 +29,6 @@ public class Maestro {
             throw new IllegalArgumentException("El numero de empleado debe ser mayor a 0");
         }
         this.numEmpleado = numEmpleado;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        if (nombre == null || nombre.trim().isEmpty()) {
-            throw new IllegalArgumentException("El nombre no puede estar vacio");
-        }
-        this.nombre = nombre.trim();
     }
 
     public String getPuesto() {
@@ -79,38 +63,29 @@ public class Maestro {
         }
         this.edad = edad;
     }
-    public boolean modificarMaestro(Maestro maestro) {
-        boolean modificado = false;
-        String sql = "UPDATE maestros SET nombre = ?, puesto = ?, cedulaProfesional = ?, edad = ? WHERE numEmpleado = ?";
-        try (Connection conexion = Conexion.conectar();
-             PreparedStatement stm = conexion.prepareStatement(sql)) {
-            stm.setString(1, maestro.getNombre());
-            stm.setString(2, maestro.getPuesto());
-            stm.setString(3, maestro.getCedulaProfesional());
-            stm.setInt(4, maestro.getEdad());
-            stm.setInt(5, maestro.getNumEmpleado());
-            int filasAfectadas = stm.executeUpdate();
-            modificado = filasAfectadas > 0;
-            if (modificado) {
-                System.out.println("Maestro modificado correctamente");
-            } else {
-                System.out.println("No se encontro un maestro con ese numero de empleado");
-            }
-        } catch (SQLException err) {
-            System.out.println("Error al modificar el maestro: " + err.getMessage());
-        }
-        return modificado;
+
+    @Override
+    public String mostrarTipoPersona() {
+        return "Tipo: Profesor";
+    }
+
+    @Override
+    public void ensenar() {
+        System.out.println(getNombre() + " esta enseñando como " + puesto);
+    }
+
+    @Override
+    public void evaluar() {
+        System.out.println(getNombre() + " esta evaluando a sus alumnos");
     }
 
     @Override
     public String toString() {
-        return "Maestro{" +
-                "numEmpleado=" + numEmpleado +
-                ", nombre='" + nombre + '\'' +
-                ", puesto='" + puesto + '\'' +
-                ", cedulaProfesional='" + cedulaProfesional + '\'' +
-                ", edad=" + edad +
-                '}';
+        return super.toString() + "\n" +
+                "Numero de empleado: " + numEmpleado + "\n" +
+                "Puesto: " + puesto + "\n" +
+                "Cedula profesional: " + cedulaProfesional + "\n" +
+                "Edad: " + edad;
     }
 
     @Override
