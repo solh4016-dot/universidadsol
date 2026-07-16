@@ -1,0 +1,265 @@
+package org.example.vista;
+
+import org.example.dao.AlumnoDAO;
+import org.example.dao.MaestroDAO;
+import org.example.modelo.Alumno;
+import org.example.modelo.Maestro;
+import org.example.modelo.PersonaUT;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+public class Menu {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static AlumnoDAO alumnoDAO = new AlumnoDAO();
+    static MaestroDAO maestroDAO = new MaestroDAO();
+
+    // ---- Modulo: Alumnos ----
+
+    private static void registrar() {
+        try {
+            System.out.println("Numero de expediente: ");
+            int numExpediente = Integer.parseInt(br.readLine());
+            System.out.println("Nombre del alumno: ");
+            String nombre = br.readLine();
+            System.out.println("Edad del alumno: ");
+            int edad = Integer.parseInt(br.readLine());
+            System.out.println("Carrera del alumno (TI, Qui, Mec, Mkt): ");
+            String carrera = br.readLine();
+            System.out.println("Cuatrimestre del alumno: ");
+            int cuatrimestres = Integer.parseInt(br.readLine());
+
+            Alumno alumno = new Alumno(numExpediente, nombre, edad, carrera, cuatrimestres);
+            alumnoDAO.nuevoAlumno(alumno);
+        } catch (Exception e) {
+            System.out.println("Error al ingresar: " + e.getMessage());
+        }
+    }
+
+    private static void listar() {
+        ArrayList<Alumno> alumnos = alumnoDAO.extraerAlumnos();
+        System.out.println("Lista de alumnos inscritos:");
+        for (Alumno a : alumnos) {
+            System.out.println(a);
+        }
+    }
+
+    private static void modificar() {
+        try {
+            System.out.println("Numero de expediente del alumno a modificar: ");
+            int numExpediente = Integer.parseInt(br.readLine());
+
+            Alumno alumnoModificado = new Alumno();
+            alumnoModificado.setNumExpediente(numExpediente);
+
+            System.out.println("Nuevo nombre del alumno: ");
+            alumnoModificado.setNombre(br.readLine());
+            System.out.println("Nueva edad del alumno: ");
+            alumnoModificado.setEdad(Integer.parseInt(br.readLine()));
+            System.out.println("Nueva carrera del alumno (TI, Qui, Mec, Mkt): ");
+            alumnoModificado.setCarrera(br.readLine());
+            System.out.println("Nuevo cuatrimestre del alumno: ");
+            alumnoModificado.setCuatrimestres(Integer.parseInt(br.readLine()));
+
+            alumnoDAO.modificarAlumno(alumnoModificado);
+        } catch (Exception e) {
+            System.out.println("Error al modificar: " + e.getMessage());
+        }
+    }
+
+    private static void eliminar() {
+        try {
+            System.out.println("Numero de expediente del alumno a eliminar: ");
+            int numExpediente = Integer.parseInt(br.readLine());
+            alumnoDAO.eliminarAlumno(numExpediente);
+        } catch (Exception e) {
+            System.out.println("Error al eliminar: " + e.getMessage());
+        }
+    }
+
+    private static void buscar() {
+        try {
+            System.out.println("Numero de expediente del alumno a buscar: ");
+            int numExpediente = Integer.parseInt(br.readLine());
+            Alumno encontrado = alumnoDAO.buscarAlumno(numExpediente);
+            if (encontrado != null) {
+                System.out.println("Alumno encontrado:");
+                System.out.println(encontrado);
+            } else {
+                System.out.println("No se encontro un alumno con ese numero de expediente");
+            }
+        } catch (Exception e) {
+            System.out.println("Error al buscar: " + e.getMessage());
+        }
+    }
+
+    // ---- Modulo: Profesores/Maestros ----
+
+    private static void registrarMaestro() {
+        try {
+            System.out.println("Numero de empleado: ");
+            int numEmpleado = Integer.parseInt(br.readLine());
+            System.out.println("Nombre del maestro: ");
+            String nombre = br.readLine();
+            System.out.println("Puesto: ");
+            String puesto = br.readLine();
+            System.out.println("Cedula profesional: ");
+            String cedulaProfesional = br.readLine();
+            System.out.println("Edad del maestro: ");
+            int edad = Integer.parseInt(br.readLine());
+
+            Maestro maestro = new Maestro(numEmpleado, nombre, puesto, cedulaProfesional, edad);
+            maestroDAO.nuevoMaestro(maestro);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Datos invalidos: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error al ingresar: " + e.getMessage());
+        }
+    }
+
+    private static void listarMaestros() {
+        ArrayList<Maestro> maestros = maestroDAO.extraerMaestros();
+        System.out.println("Lista de maestros registrados:");
+        for (Maestro m : maestros) {
+            System.out.println(m);
+        }
+    }
+
+    private static void modificarMaestro() {
+        try {
+            System.out.println("Numero de empleado del maestro a modificar: ");
+            int numEmpleado = Integer.parseInt(br.readLine());
+
+            Maestro maestroModificado = new Maestro();
+            maestroModificado.setNumEmpleado(numEmpleado);
+
+            System.out.println("Nuevo nombre del maestro: ");
+            maestroModificado.setNombre(br.readLine());
+            System.out.println("Nuevo puesto: ");
+            maestroModificado.setPuesto(br.readLine());
+            System.out.println("Nueva cedula profesional: ");
+            maestroModificado.setCedulaProfesional(br.readLine());
+            System.out.println("Nueva edad del maestro: ");
+            maestroModificado.setEdad(Integer.parseInt(br.readLine()));
+
+            maestroDAO.modificarMaestro(maestroModificado);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Datos invalidos: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error al modificar: " + e.getMessage());
+        }
+    }
+
+    private static void eliminarMaestro() {
+        try {
+            System.out.println("Numero de empleado del maestro a eliminar: ");
+            int numEmpleado = Integer.parseInt(br.readLine());
+            maestroDAO.eliminarMaestro(numEmpleado);
+        } catch (Exception e) {
+            System.out.println("Error al eliminar: " + e.getMessage());
+        }
+    }
+
+    private static void buscarMaestro() {
+        try {
+            System.out.println("Numero de empleado del maestro a buscar: ");
+            int numEmpleado = Integer.parseInt(br.readLine());
+            Maestro encontrado = maestroDAO.buscarMaestro(numEmpleado);
+            if (encontrado != null) {
+                System.out.println("Maestro encontrado:");
+                System.out.println(encontrado);
+            } else {
+                System.out.println("No se encontro un maestro con ese numero de empleado");
+            }
+        } catch (Exception e) {
+            System.out.println("Error al buscar: " + e.getMessage());
+        }
+    }
+
+    // ---- Modulo: Polimorfismo ----
+
+    private static void mostrarComunidadUniversitaria() {
+        ArrayList<Alumno> alumnos = alumnoDAO.extraerAlumnos();
+        ArrayList<Maestro> maestros = maestroDAO.extraerMaestros();
+
+        ArrayList<PersonaUT> comunidad = new ArrayList<>();
+        comunidad.addAll(alumnos);
+        comunidad.addAll(maestros);
+
+        System.out.println("---- Comunidad Universitaria ----");
+        for (PersonaUT persona : comunidad) {
+            System.out.println(persona);
+            System.out.println("----------------------------------");
+        }
+    }
+
+    // ---- Menu principal ----
+
+    public static void menu() {
+        try {
+            int salir = 0;
+            while (salir != 12) {
+                System.out.println("Menu");
+                System.out.println("1. Registrar Alumno");
+                System.out.println("2. Listar Alumnos");
+                System.out.println("3. Modificar Alumno");
+                System.out.println("4. Eliminar Alumno");
+                System.out.println("5. Buscar Alumno");
+                System.out.println("6. Registrar Maestro");
+                System.out.println("7. Listar Maestros");
+                System.out.println("8. Modificar Maestro");
+                System.out.println("9. Eliminar Maestro");
+                System.out.println("10. Buscar Maestro");
+                System.out.println("11. Mostrar Comunidad Universitaria");
+                System.out.println("12. Salir\n");
+
+                salir = Integer.parseInt(br.readLine());
+
+                switch (salir) {
+                    case 1:
+                        registrar();
+                        break;
+                    case 2:
+                        listar();
+                        break;
+                    case 3:
+                        modificar();
+                        break;
+                    case 4:
+                        eliminar();
+                        break;
+                    case 5:
+                        buscar();
+                        break;
+                    case 6:
+                        registrarMaestro();
+                        break;
+                    case 7:
+                        listarMaestros();
+                        break;
+                    case 8:
+                        modificarMaestro();
+                        break;
+                    case 9:
+                        eliminarMaestro();
+                        break;
+                    case 10:
+                        buscarMaestro();
+                        break;
+                    case 11:
+                        mostrarComunidadUniversitaria();
+                        break;
+                    case 12:
+                        System.out.println("Saliendo del sistema...");
+                        break;
+                    default:
+                        System.out.println("Opcion invalida");
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error al cargar: " + e.getMessage());
+        }
+    }
+}
