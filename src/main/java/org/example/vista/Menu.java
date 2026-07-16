@@ -1,4 +1,4 @@
-package org.example;
+package org.example.vista;
 
 import org.example.dao.AlumnoDAO;
 import org.example.dao.MaestroDAO;
