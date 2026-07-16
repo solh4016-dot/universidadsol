@@ -1,0 +1,137 @@
+<html>
+<head>
+<title>MaestroDAO.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#191a1c">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+MaestroDAO.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">org</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">dao</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">config</span><span class="s2">.</span><span class="s1">Conexion</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">modelo</span><span class="s2">.</span><span class="s1">Maestro</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">sql</span><span class="s2">.</span><span class="s1">Connection</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">sql</span><span class="s2">.</span><span class="s1">PreparedStatement</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">sql</span><span class="s2">.</span><span class="s1">ResultSet</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">sql</span><span class="s2">.</span><span class="s1">SQLException</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">ArrayList</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">MaestroDAO </span><span class="s2">{</span>
+
+    <span class="s0">public boolean </span><span class="s1">nuevoMaestro</span><span class="s2">(</span><span class="s1">Maestro maestro</span><span class="s2">) {</span>
+        <span class="s0">boolean </span><span class="s1">registrado </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+        <span class="s1">String sql </span><span class="s2">= </span><span class="s3">&quot;INSERT INTO maestros (numEmpleado, nombre, puesto, cedulaProfesional, edad) VALUES (?,?,?,?,?)&quot;</span><span class="s2">;</span>
+        <span class="s0">try </span><span class="s2">(</span><span class="s1">Connection conexion </span><span class="s2">= </span><span class="s1">Conexion</span><span class="s2">.</span><span class="s1">conectar</span><span class="s2">();</span>
+             <span class="s1">PreparedStatement stm </span><span class="s2">= </span><span class="s1">conexion</span><span class="s2">.</span><span class="s1">prepareStatement</span><span class="s2">(</span><span class="s1">sql</span><span class="s2">)) {</span>
+            <span class="s1">stm</span><span class="s2">.</span><span class="s1">setInt</span><span class="s2">(</span><span class="s4">1</span><span class="s2">, </span><span class="s1">maestro</span><span class="s2">.</span><span class="s1">getNumEmpleado</span><span class="s2">());</span>
+            <span class="s1">stm</span><span class="s2">.</span><span class="s1">setString</span><span class="s2">(</span><span class="s4">2</span><span class="s2">, </span><span class="s1">maestro</span><span class="s2">.</span><span class="s1">getNombre</span><span class="s2">());</span>
+            <span class="s1">stm</span><span class="s2">.</span><span class="s1">setString</span><span class="s2">(</span><span class="s4">3</span><span class="s2">, </span><span class="s1">maestro</span><span class="s2">.</span><span class="s1">getPuesto</span><span class="s2">());</span>
+            <span class="s1">stm</span><span class="s2">.</span><span class="s1">setString</span><span class="s2">(</span><span class="s4">4</span><span class="s2">, </span><span class="s1">maestro</span><span class="s2">.</span><span class="s1">getCedulaProfesional</span><span class="s2">());</span>
+            <span class="s1">stm</span><span class="s2">.</span><span class="s1">setInt</span><span class="s2">(</span><span class="s4">5</span><span class="s2">, </span><span class="s1">maestro</span><span class="s2">.</span><span class="s1">getEdad</span><span class="s2">());</span>
+            <span class="s0">int </span><span class="s1">filasAfectadas </span><span class="s2">= </span><span class="s1">stm</span><span class="s2">.</span><span class="s1">executeUpdate</span><span class="s2">();</span>
+            <span class="s1">registrado </span><span class="s2">= </span><span class="s1">filasAfectadas </span><span class="s2">&gt; </span><span class="s4">0</span><span class="s2">;</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">registrado</span><span class="s2">) {</span>
+                <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Maestro agregado correctamente&quot;</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">SQLException err</span><span class="s2">) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;ERROR AL AGREGAR MAESTRO: &quot; </span><span class="s2">+ </span><span class="s1">err</span><span class="s2">.</span><span class="s1">getMessage</span><span class="s2">());</span>
+        <span class="s2">}</span>
+        <span class="s0">return </span><span class="s1">registrado</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">Maestro</span><span class="s2">&gt; </span><span class="s1">extraerMaestros</span><span class="s2">() {</span>
+        <span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">Maestro</span><span class="s2">&gt; </span><span class="s1">maestrosBD </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;&gt;();</span>
+        <span class="s1">String sql </span><span class="s2">= </span><span class="s3">&quot;SELECT * FROM maestros&quot;</span><span class="s2">;</span>
+        <span class="s0">try </span><span class="s2">(</span><span class="s1">Connection conexion </span><span class="s2">= </span><span class="s1">Conexion</span><span class="s2">.</span><span class="s1">conectar</span><span class="s2">();</span>
+             <span class="s1">PreparedStatement stm </span><span class="s2">= </span><span class="s1">conexion</span><span class="s2">.</span><span class="s1">prepareStatement</span><span class="s2">(</span><span class="s1">sql</span><span class="s2">);</span>
+             <span class="s1">ResultSet rs </span><span class="s2">= </span><span class="s1">stm</span><span class="s2">.</span><span class="s1">executeQuery</span><span class="s2">()) {</span>
+            <span class="s0">while </span><span class="s2">(</span><span class="s1">rs</span><span class="s2">.</span><span class="s1">next</span><span class="s2">()) {</span>
+                <span class="s1">Maestro maestro </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Maestro</span><span class="s2">();</span>
+                <span class="s1">maestro</span><span class="s2">.</span><span class="s1">setNumEmpleado</span><span class="s2">(</span><span class="s1">rs</span><span class="s2">.</span><span class="s1">getInt</span><span class="s2">(</span><span class="s3">&quot;numEmpleado&quot;</span><span class="s2">));</span>
+                <span class="s1">maestro</span><span class="s2">.</span><span class="s1">setNombre</span><span class="s2">(</span><span class="s1">rs</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s3">&quot;nombre&quot;</span><span class="s2">));</span>
+                <span class="s1">maestro</span><span class="s2">.</span><span class="s1">setPuesto</span><span class="s2">(</span><span class="s1">rs</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s3">&quot;puesto&quot;</span><span class="s2">));</span>
+                <span class="s1">maestro</span><span class="s2">.</span><span class="s1">setCedulaProfesional</span><span class="s2">(</span><span class="s1">rs</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s3">&quot;cedulaProfesional&quot;</span><span class="s2">));</span>
+                <span class="s1">maestro</span><span class="s2">.</span><span class="s1">setEdad</span><span class="s2">(</span><span class="s1">rs</span><span class="s2">.</span><span class="s1">getInt</span><span class="s2">(</span><span class="s3">&quot;edad&quot;</span><span class="s2">));</span>
+                <span class="s1">maestrosBD</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">maestro</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">SQLException err</span><span class="s2">) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Error al extraer los datos: &quot; </span><span class="s2">+ </span><span class="s1">err</span><span class="s2">.</span><span class="s1">getMessage</span><span class="s2">());</span>
+        <span class="s2">}</span>
+        <span class="s0">return </span><span class="s1">maestrosBD</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public boolean </span><span class="s1">modificarMaestro</span><span class="s2">(</span><span class="s1">Maestro maestro</span><span class="s2">) {</span>
+        <span class="s0">boolean </span><span class="s1">modificado </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+        <span class="s1">String sql </span><span class="s2">= </span><span class="s3">&quot;UPDATE maestros SET nombre = ?, puesto = ?, cedulaProfesional = ?, edad = ? WHERE numEmpleado = ?&quot;</span><span class="s2">;</span>
+        <span class="s0">try </span><span class="s2">(</span><span class="s1">Connection conexion </span><span class="s2">= </span><span class="s1">Conexion</span><span class="s2">.</span><span class="s1">conectar</span><span class="s2">();</span>
+             <span class="s1">PreparedStatement stm </span><span class="s2">= </span><span class="s1">conexion</span><span class="s2">.</span><span class="s1">prepareStatement</span><span class="s2">(</span><span class="s1">sql</span><span class="s2">)) {</span>
+            <span class="s1">stm</span><span class="s2">.</span><span class="s1">setString</span><span class="s2">(</span><span class="s4">1</span><span class="s2">, </span><span class="s1">maestro</span><span class="s2">.</span><span class="s1">getNombre</span><span class="s2">());</span>
+            <span class="s1">stm</span><span class="s2">.</span><span class="s1">setString</span><span class="s2">(</span><span class="s4">2</span><span class="s2">, </span><span class="s1">maestro</span><span class="s2">.</span><span class="s1">getPuesto</span><span class="s2">());</span>
+            <span class="s1">stm</span><span class="s2">.</span><span class="s1">setString</span><span class="s2">(</span><span class="s4">3</span><span class="s2">, </span><span class="s1">maestro</span><span class="s2">.</span><span class="s1">getCedulaProfesional</span><span class="s2">());</span>
+            <span class="s1">stm</span><span class="s2">.</span><span class="s1">setInt</span><span class="s2">(</span><span class="s4">4</span><span class="s2">, </span><span class="s1">maestro</span><span class="s2">.</span><span class="s1">getEdad</span><span class="s2">());</span>
+            <span class="s1">stm</span><span class="s2">.</span><span class="s1">setInt</span><span class="s2">(</span><span class="s4">5</span><span class="s2">, </span><span class="s1">maestro</span><span class="s2">.</span><span class="s1">getNumEmpleado</span><span class="s2">());</span>
+            <span class="s0">int </span><span class="s1">filasAfectadas </span><span class="s2">= </span><span class="s1">stm</span><span class="s2">.</span><span class="s1">executeUpdate</span><span class="s2">();</span>
+            <span class="s1">modificado </span><span class="s2">= </span><span class="s1">filasAfectadas </span><span class="s2">&gt; </span><span class="s4">0</span><span class="s2">;</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">modificado</span><span class="s2">) {</span>
+                <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Maestro modificado correctamente&quot;</span><span class="s2">);</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;No se encontro un maestro con ese numero de empleado&quot;</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">SQLException err</span><span class="s2">) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Error al modificar el maestro: &quot; </span><span class="s2">+ </span><span class="s1">err</span><span class="s2">.</span><span class="s1">getMessage</span><span class="s2">());</span>
+        <span class="s2">}</span>
+        <span class="s0">return </span><span class="s1">modificado</span><span class="s2">;</span>
+    <span class="s2">}</span>
+    <span class="s0">public boolean </span><span class="s1">eliminarMaestro</span><span class="s2">(</span><span class="s0">int </span><span class="s1">numEmpleado</span><span class="s2">) {</span>
+        <span class="s0">boolean </span><span class="s1">eliminado </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+        <span class="s1">String sql </span><span class="s2">= </span><span class="s3">&quot;DELETE FROM maestros WHERE numEmpleado = ?&quot;</span><span class="s2">;</span>
+        <span class="s0">try </span><span class="s2">(</span><span class="s1">Connection conexion </span><span class="s2">= </span><span class="s1">Conexion</span><span class="s2">.</span><span class="s1">conectar</span><span class="s2">();</span>
+             <span class="s1">PreparedStatement stm </span><span class="s2">= </span><span class="s1">conexion</span><span class="s2">.</span><span class="s1">prepareStatement</span><span class="s2">(</span><span class="s1">sql</span><span class="s2">)) {</span>
+            <span class="s1">stm</span><span class="s2">.</span><span class="s1">setInt</span><span class="s2">(</span><span class="s4">1</span><span class="s2">, </span><span class="s1">numEmpleado</span><span class="s2">);</span>
+            <span class="s0">int </span><span class="s1">filasAfectadas </span><span class="s2">= </span><span class="s1">stm</span><span class="s2">.</span><span class="s1">executeUpdate</span><span class="s2">();</span>
+            <span class="s1">eliminado </span><span class="s2">= </span><span class="s1">filasAfectadas </span><span class="s2">&gt; </span><span class="s4">0</span><span class="s2">;</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">eliminado</span><span class="s2">) {</span>
+                <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Maestro eliminado correctamente&quot;</span><span class="s2">);</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;No se encontro un maestro con ese numero de empleado&quot;</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">SQLException err</span><span class="s2">) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Error al eliminar el maestro: &quot; </span><span class="s2">+ </span><span class="s1">err</span><span class="s2">.</span><span class="s1">getMessage</span><span class="s2">());</span>
+        <span class="s2">}</span>
+        <span class="s0">return </span><span class="s1">eliminado</span><span class="s2">;</span>
+    <span class="s2">}</span>
+    <span class="s0">public </span><span class="s1">Maestro buscarMaestro</span><span class="s2">(</span><span class="s0">int </span><span class="s1">numEmpleado</span><span class="s2">) {</span>
+        <span class="s1">Maestro maestro </span><span class="s2">= </span><span class="s0">null</span><span class="s2">;</span>
+        <span class="s1">String sql </span><span class="s2">= </span><span class="s3">&quot;SELECT * FROM maestros WHERE numEmpleado = ?&quot;</span><span class="s2">;</span>
+        <span class="s0">try </span><span class="s2">(</span><span class="s1">Connection conexion </span><span class="s2">= </span><span class="s1">Conexion</span><span class="s2">.</span><span class="s1">conectar</span><span class="s2">();</span>
+             <span class="s1">PreparedStatement stm </span><span class="s2">= </span><span class="s1">conexion</span><span class="s2">.</span><span class="s1">prepareStatement</span><span class="s2">(</span><span class="s1">sql</span><span class="s2">)) {</span>
+            <span class="s1">stm</span><span class="s2">.</span><span class="s1">setInt</span><span class="s2">(</span><span class="s4">1</span><span class="s2">, </span><span class="s1">numEmpleado</span><span class="s2">);</span>
+            <span class="s0">try </span><span class="s2">(</span><span class="s1">ResultSet rs </span><span class="s2">= </span><span class="s1">stm</span><span class="s2">.</span><span class="s1">executeQuery</span><span class="s2">()) {</span>
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">rs</span><span class="s2">.</span><span class="s1">next</span><span class="s2">()) {</span>
+                    <span class="s1">maestro </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Maestro</span><span class="s2">();</span>
+                    <span class="s1">maestro</span><span class="s2">.</span><span class="s1">setNumEmpleado</span><span class="s2">(</span><span class="s1">rs</span><span class="s2">.</span><span class="s1">getInt</span><span class="s2">(</span><span class="s3">&quot;numEmpleado&quot;</span><span class="s2">));</span>
+                    <span class="s1">maestro</span><span class="s2">.</span><span class="s1">setNombre</span><span class="s2">(</span><span class="s1">rs</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s3">&quot;nombre&quot;</span><span class="s2">));</span>
+                    <span class="s1">maestro</span><span class="s2">.</span><span class="s1">setPuesto</span><span class="s2">(</span><span class="s1">rs</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s3">&quot;puesto&quot;</span><span class="s2">));</span>
+                    <span class="s1">maestro</span><span class="s2">.</span><span class="s1">setCedulaProfesional</span><span class="s2">(</span><span class="s1">rs</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s3">&quot;cedulaProfesional&quot;</span><span class="s2">));</span>
+                    <span class="s1">maestro</span><span class="s2">.</span><span class="s1">setEdad</span><span class="s2">(</span><span class="s1">rs</span><span class="s2">.</span><span class="s1">getInt</span><span class="s2">(</span><span class="s3">&quot;edad&quot;</span><span class="s2">));</span>
+                <span class="s2">}</span>
+            <span class="s2">}</span>
+        <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">SQLException err</span><span class="s2">) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Error al buscar el maestro: &quot; </span><span class="s2">+ </span><span class="s1">err</span><span class="s2">.</span><span class="s1">getMessage</span><span class="s2">());</span>
+        <span class="s2">}</span>
+        <span class="s0">return </span><span class="s1">maestro</span><span class="s2">;</span>
+    <span class="s2">}</span>
+<span class="s2">}</span></pre>
+</body>
+</html>
